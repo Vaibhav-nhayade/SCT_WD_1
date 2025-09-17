@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Interactive Fixed Navigation</title>
+  <style>
+    :root{
+      --nav-height:64px;
+      --accent:#0ea5a4;
+      --bg:rgba(255,255,255,0.6);
+      --bg-scrolled:rgba(14,165,164,0.95);
+      --text:#0f172a;
+      --text-inverse:#ffffff;
+      --shadow:0 6px 18px rgba(2,6,23,0.12);
+      --glass:blur(6px);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;line-height:1.4;color:var(--text)}
+    header{height:var(--nav-height)}
+    nav{position:fixed;top:0;left:0;right:0;height:var(--nav-height);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--bg);backdrop-filter:var(--glass);transition:background .28s ease,color .28s ease,box-shadow .28s ease;z-index:999}
+    nav.scrolled{background:var(--bg-scrolled);box-shadow:var(--shadow)}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+    .logo{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:inline-grid;place-items:center;color:var(--text-inverse);font-weight:700}
+    .nav-links{display:flex;gap:8px;align-items:center}
+    .nav-links a{position:relative;padding:10px 14px;border-radius:10px;text-decoration:none;color:inherit;font-weight:600;transition:transform .15s ease,color .15s ease,background .15s ease}
+    .nav-links a:hover{transform:translateY(-2px)}
+    .nav-links a::after{content:'';position:absolute;left:14px;right:14px;bottom:8px;height:3px;border-radius:3px;transform:scaleX(0);transform-origin:left center;transition:transform .2s cubic-bezier(.2,.9,.2,1);background:linear-gradient(90deg,var(--accent),#7c3aed)}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .nav-links a.active{color:var(--text-inverse);background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))}
+    .nav-links a.active::after{transform:scaleX(1)}
+    nav.scrolled .brand,.nav-links a{color:var(--text-inverse)}
+    .hamburger{display:none;border:0;background:none;padding:8px;border-radius:8px}
+    main{padding:28px 20px;margin-top:8px}
+    section{min-height:100vh;padding:60px 12px;border-radius:12px;margin:20px 0;background:linear-gradient(180deg,#fff, #fbfbfd)}
+    @media(max-width:880px){
+      .nav-links{position:fixed;right:12px;top:var(--nav-height);flex-direction:column;background:rgba(255,255,255,0.96);padding:10px;border-radius:12px;box-shadow:var(--shadow);display:none}
+      .nav-links.open{display:flex}
+      .hamburger{display:inline-grid}
+      nav.scrolled .nav-links{background:rgba(255,255,255,0.06)}
+    }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" role="navigation" aria-label="Primary">
+    <a class="brand" href="#home">
+      <span class="logo">N</span>
+      <span class="site-name">NavDemo</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button id="hamb" aria-label="Toggle menu" class="hamburger">
+        <svg width="22" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <header id="home"></header>
+    <section id="about">
+      <h2>About</h2>
+      <p>This section demonstrates how the navigation highlights the current section while remaining fixed at the top of the page.</p>
+    </section>
+    <section id="services">
+      <h2>Services</h2>
+      <p>Scroll to see the nav change its style and the active link update. Hover over items to see micro-interactions.</p>
+    </section>
+    <section id="work">
+      <h2>Work</h2>
+      <p>Each section is big enough to test the scrolling behavior and Intersection Observer logic.</p>
+    </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Try resizing the window to see the responsive menu for smaller screens.</p>
+    </section>
+  </main>
+  <script>
+    const nav=document.getElementById('site-nav');
+    const links=document.querySelectorAll('#nav-links a');
+    const sections=[...document.querySelectorAll('main section')];
+    const hamb=document.getElementById('hamb');
+    const navLinks=document.getElementById('nav-links');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY>50){
+        nav.classList.add('scrolled')
+      }else{
+        nav.classList.remove('scrolled')
+      }
+    });
+    links.forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const id=a.getAttribute('href').slice(1);
+        const el=document.getElementById(id);
+        if(el){
+          window.scrollTo({top:el.offsetTop- (parseInt(getComputedStyle(nav).height)||64) + 6,behavior:'smooth'})
+        }
+        if(navLinks.classList.contains('open')){
+          navLinks.classList.remove('open')
+        }
+      })
+    })
+    hamb.addEventListener('click',()=>{
+      navLinks.classList.toggle('open')
+    })
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const id=entry.target.id;
+          links.forEach(l=>{
+            l.classList.toggle('active', l.getAttribute('href')===`#${id}`)
+          })
+        }
+      })
+    },{root:null,rootMargin:'-30% 0px -40% 0px',threshold:0})
+    sections.forEach(s=>observer.observe(s))
+    document.addEventListener('keydown',e=>{
+      if(e.key==='/'){
+        e.preventDefault();
+        document.querySelector('.nav-links a')?.focus()
+      }
+    })
+  </script>
+</body>
+</html>
