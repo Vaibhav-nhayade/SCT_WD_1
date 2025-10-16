@@ -1,13 +1,23 @@
-# Web Development Intern Task – Skillcraft Technology  
+# SkillCraft Technology - Web Development Internship (Task 1)
 
-This repository contains my **first internship task** at **Skillcraft Technology**, where I worked on building and enhancing web development skills through practical implementation.  
+## Project Overview
 
-## 📌 About the Task  
-The objective of this task was to:  
-- Strengthen my fundamentals in **HTML, CSS, and JavaScript**.  
-- Gain hands-on experience with **front-end development**.  
+This project was developed as part of my **Web Development Internship (Task 1)** with **SkillCraft Technology**.
+The goal of this task was to create a responsive and visually appealing **webpage** using **HTML**, **CSS**, and **JavaScript**, showcasing fundamental front-end development skills such as layout design, styling, and interactivity.
 
-## 🛠️ Technologies Used  
-- **HTML5** – for structuring the web pages  
-- **CSS3** – for styling and layout  
-- **Git & GitHub** – for version control and collaboration  
+---
+
+## Features
+
+* ✅ Clean and responsive web design
+* ✅ Built with **HTML5**, **CSS3**, and **JavaScript**
+* ✅ User-friendly layout and navigation
+* ✅ Interactive elements for better user experience
+* ✅ Organized folder structure and well-commented code
+
+
+## Author
+
+**Name:** Vaibhav Nhayade
+**Internship:** SkillCraft Technology – Web Development Internship
+**Task:** Task 1 – HTML, CSS & JavaScript
